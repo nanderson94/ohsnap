@@ -4,7 +4,10 @@ var dns 		= require('dns'),
 	requesta 	= require('request');
 
 // GMU's UAC page uses a self-signed certificate
-//process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+
+// TO-DO: Include expected server certificate?
+
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 // Not quite ready for this one yet!
 var mobileUA = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D"
@@ -26,10 +29,15 @@ exports.login = function(username, password, options, callback) {
 		ua: 	options['ua']  		|| mobileUA,
 		realm: 	options['realm']	|| "students"
 	};
-
+	console.log(options["realm"]);
+	console.log("asdf");
 	var browser = new zombie();
 //	browser.userAgent = options['ua'];
+	browser.on('error',function (err){
+	//    console.log(err.stack)
+	});
 	browser.visit(options['url']+options['realm'], function() {
+		console.log(browser.location.pathname);
 		if (browser.location.pathname == "/dana/home/infranet.cgi") {
 			// Already logged in
 			callback("Logged In");
@@ -58,7 +66,9 @@ exports.checkNetwork = function(callback) {
 			// UAC Redirect
 
 			// Are we actually connecting to the UAC?
-			requesta.get({url:'https://uac.gmu.edu'})
+			// requesta.get({url:'https://uac.gmu.edu'}, function(error) {
+			// 	// Uhh, I don't know how to test this, maybe go to Starbucks?
+			// })
 			callback(1);
 		} else {
 			// All Good

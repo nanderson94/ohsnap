@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Requires node-gyp
-# sudo npm install -g node-gyp
+# sudo npm install -g nw-gyp
 
 # Got directories with
 # find src/ -name "*.gyp"
