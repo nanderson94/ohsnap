@@ -1,0 +1,113 @@
+html, body {
+	padding:0;
+	margin:0;
+	font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+	height:100%;
+	-webkit-font-smoothing:antialiased;
+	-webkit-app-region: drag;
+	-webkit-user-select: none;
+}
+cite {
+	font-style:normal;
+	font-size:10px;
+	text-align:center;
+	color:#222;
+	display:block;
+	margin:15px 0 0;
+}
+#controls {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	font-size:16px;
+	font-weight:bold;
+	font-family:monospace;
+}
+#controls div {
+	display:inline-block;
+	text-align:right;
+	padding:5px;
+}
+.success {
+	color:#5da423;
+}
+.fail {
+	color:#c60f13;
+}
+h2 {
+	width:90%;
+	margin: 0 auto 10px;
+}
+#login, #settings, #loggedin {
+	padding:15px 0;
+}
+#settings-btn {
+	position:absolute;
+	top:37px;
+	right:37px;
+}
+#settings-btn img {
+	height:25px;
+}
+input[type=checkbox] {
+	-webkit-appearance:none;
+	font-size:20px;
+	background-image: url(check.png);
+	background-clip:0 0;
+	width:20px;
+	height:20px;
+	vertical-align:top;
+}
+input[type=checkbox]:checked {
+	background-position: 0 -20px;
+	background-size: cover;
+}
+option {
+	line-height:120%;
+}
+select {
+	margin-top: 15px;
+}
+#login input[type=password], #login input[type=text] {
+	width:90%;
+	padding: 8px;
+	display:block;
+	margin: 15px auto 0;
+	height:30px;
+	font-size:15px;
+	box-sizing:border-box;
+}
+.row, .columns, .small-6 {
+	margin: 0;
+	padding:0;
+}
+.row {
+	width:90%;
+	margin: 0 auto;
+}
+input, button, label, #controls, select, option {
+	-webkit-app-region: no-drag;
+}
+label[for="minimize"] {
+	margin-top:15px;
+}
+label {
+	margin: 0 auto 0;
+	line-height:20px;
+}
+button {
+	width:90%;
+	border-radius:0;
+	display:block;
+	text-align:center;
+	margin: 0 auto;
+}
+#settings {
+	display:none;
+}
+#loggedin {
+	display:none;
+}
+#authuser {
+	display:none;
+}

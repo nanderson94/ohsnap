@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Oh SNAP!</title>
+	<link rel="stylesheet" href="resource/foundation.css">
+	<link rel="stylesheet" href="resource/style.css">
+	<script src="resource/page.js"></script>
+	<script src="resource/jquery.js"></script>
+	<script>
+		var snap = process.mainModule.exports,
+			gui = require('nw.gui'),
+			tray = new gui.Tray({title:"Oh SNAP!", tooltip:"Inactive", icon:"resource/icon-inactive.png"}),
+			menu = new gui.Menu(),
+			win = gui.Window.get(),
+			winVisible = true,
+			daloop, forceLoop, lastlogin,
+			lastloginloop, username, realm;
+
+		win.on('minimize', function() {
+			this.show();
+		});
+		tray.on('click', function() {
+			if (winVisible==true) {
+				win.show(false);
+				winVisible = false;
+				clearInterval(lastloginloop);
+			} else {
+				if (appState.status > 2) {
+					$('#llogin').text(timeSince(lastlogin)+" ago");
+					lastloginloop = setInterval(function() {
+						$('#llogin').text(timeSince(lastlogin)+" ago");
+					}, 1 * 1000);
+				}
+				win.show();
+				win.focus();
+				winVisible = true;
+			}
+		});
+		win.on('close', function() {
+			if (appState.status > 0) {
+				if (confirm("You will lose access to protected resources.\n\nAre you sure you want to leave this page?")) {
+					win.close(true);
+				}
+			} else {
+				win.close(true);
+			}
+		});
+		appState.change(0);
+
+		$(function() {
+			// Restore settings from memory
+			settings.loadAll();
+			$('#submit').click(function() {
+				$('#netid, #password').attr('disabled', true);
+				// Validate username (aka, no @gmu.edu)
+				username = /([A-Za-z0-9]*)/.exec($('#netid').val());
+				username = username[1];
+				realm = $('#realm').val();
+				var password = $('#password').val();
+
+				// Clear field values
+				$('#netid, #password').val('');
+
+				// Clear Net ID from storage if not set, authentication not required
+				if ($('#remember').not(':checked')) {
+					settings.saveAll('');
+				}
+
+				// Now let's start the process 
+				$('#network-status').text('Connecting...').removeClass();
+				appState.change(appState.CONNECTING);
+				$('#login').hide();
+				$('#loggedin').show();
+				snap.checkNetwork(function(status) {
+					if (status == 0) {
+						$('#network-status').text("Offline").removeClass().addClass('fail');
+						appState.change(appState.OFFLINE);
+					} else {
+						// Force login the first time
+						snap.login(username, password, {realm:realm}, function(result) {
+							if (result == "Success") {
+								lastloginloop = setInterval(function() {
+									$('#llogin').text(timeSince(lastlogin)+" ago");
+								}, 1 * 1000);
+								lastlogin = new Date().getTime();
+								if ($('#minimize').is(':checked')) {
+									window.setTimeout(function() {
+										win.show(false);
+										winVisible = false;
+									}, 500)
+								}
+								tray.icon = "resource"
+								appState.change(appState.ONLINE);
+								$('#network-status').text('Connected').removeClass().addClass('success');
+								$('#authenticated-user').text(username);
+								if ($('#remember').is(':checked')) {
+									settings.saveAll(username);
+								}
+							} else {
+								$('#network-status').text("Authentication Failure").removeClass().addClass('fail');
+								appState.change(appState.AUTHFAIL);
+							}
+						})
+					}
+				});
+				// Reactive
+				daloop = window.setTimeout(function init() {
+					if (appState.status == appState.AUTHFAIL) {
+						return;
+					}
+					snap.checkNetwork(function(status) {
+						if (status == 0) {
+							$('#network-status').text("Offline").removeClass().addClass('fail');
+							appState.change(appState.OFFLINE);
+						} else if (status == 1) {
+							lastlogin = new Date().getTime();
+							// Commence login
+							snap.login(username, password, {realm:realm}, function(result) {
+								if (result == "Success") {
+									$('#network-status').text('Connected').removeClass().addClass('success');
+									$('#authenticated-user').text(username);
+									appState.change(appState.ONLINE);
+								} else {
+									$('#network-status').text("Authentication Failure").removeClass().addClass('fail');
+									appState.change(appState.AUTHFAIL);
+								}
+							})
+						} else {
+							// All Good
+							$('#network-status').text('Connected').removeClass().addClass('success');;
+							appState.change(appState.ONLINE);
+						}
+					});
+					if (appState.status == 4 || appState.status == 3) {
+						daloop = setTimeout(init, 15000);
+					}
+				}, 15000)
+				// Proactive
+				forceLoop = setInterval(function() {
+					snap.login(username, password, {realm:realm}, function(result) {
+						if (result == "Success") {
+							lastlogin = new Date().getTime();
+							$('#network-status').text('Connected').removeClass().addClass('success');
+							$('#authenticated-user').text(username);
+							appState.change(appState.ONLINE);
+						} else {
+							$('#network-status').text("Authentication Failure").removeClass().addClass('fail');
+							appState.change(appState.AUTHFAIL);
+						}
+					});
+				}, 15 * 60 * 1000);
+			});
+			$('#sign-out').click(function() {
+				clearInterval(lastloginloop);
+				settings.loadAll();
+				$('#netid, #password').attr('disabled', false);
+				delete username, password;
+				$('#loggedin').hide();
+				$('#login').show();
+				clearTimeout(daloop);
+				clearInterval(forceLoop);
+				appState.change(appState.INACTIVE);
+			});
+			$('input').keypress(function(e) {
+				if (e.which == 13) {
+					$('#submit').click();
+				}
+			});
+			$('#retry').click(function() {
+				// Action based on connection state
+				if (appState.status > 2) {
+					clearInterval(lastloginloop);
+					snap.checkNetwork(function(status) {
+						if (status == 0) {
+							$('#network-status').text("Offline").removeClass().addClass('fail');
+							appState.change(appState.OFFLINE);
+						} else if (status == 1) {
+							// Commence login
+							snap.login(username, password, {realm:realm}, function(result) {
+								lastlogin = new Date().getTime();
+								if (result == "Success") {
+									$('#network-status').text('Connected').removeClass().addClass('success');
+									$('#authenticated-user').text(username);
+									appState.change(appState.ONLINE);
+								} else {
+									$('#network-status').text("Authentication Failure").removeClass().addClass('fail');
+									appState.change(appState.AUTHFAIL);
+								}
+							})
+						} else {
+							// All Good
+							$('#network-status').text('Connected').removeClass().addClass('success');;
+							appState.change(appState.ONLINE);
+						}
+					});
+					lastloginloop = setInterval(function() {
+						$('#llogin').text(timeSince(lastlogin)+" ago");
+					}, 1 * 1000);
+				}
+			});
+			$('#ctl_exit').click(function() {
+				win.close();
+			});
+			$('#ctl_min').click(function() {
+				clearInterval(lastloginloop);
+				win.hide();
+				winVisible = false;
+			})
+		})
+	</script>
+</head>
+<body>
+	<div id="controls"><div id="ctl_min">_</div><div id="ctl_exit">x</div></div>
+	<div id="login">
+		<h2>Oh SNAP!</h2>
+		<!-- <a href="#" id="settings-btn"><img src="resource/cog.svg"></a> -->
+		<!-- <p>George Mason University Unified Access Control login agent.</p> -->
+		<input id="netid" type="text" placeholder="GMU NetID">
+		<input id="password" type="password" placeholder="Password">
+		<div class="row">
+			<div class="small-6 columns">
+				<label for="minimize">
+					<input type="checkbox" id="minimize" checked>
+					Minimize on login
+				</label>
+				<label for="remember">
+					<input type="checkbox" id="remember" checked>
+					Remember NetID
+				</label>
+			</div>
+			<div class="small-6 columns">
+				<select id="realm">
+					<option value="student">Student</option>
+					<option value="guest">Guest</option>
+				</select>
+			</div>
+		</div>
+		<button id="submit">Sign in</button>
+		<cite>Made with love by Nicholas Anderson with Mason SRCT</cite>
+	</div>
+	<div id="loggedin">
+		<h2>Oh SNAP!</h2>
+		<div class="row">
+			<div class="small-6 columns">
+				<h4><strong>Status:</strong></h4>
+			</div>
+			<div class="small-6 columns">
+				<h4><span id="network-status">Disconnected!</span></h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-6 columns">
+				Authorized user:
+			</div>
+			<div class="small-6 columns">
+				<span id="authenticated-user"></span>
+			</div>
+		</div>
+		<div class="row" style="margin-top:5px">
+			<div class="small-6 columns">
+				Last login:
+			</div>
+			<div class="small-6 columns">
+				<span id="llogin"></span>
+			</div>
+		</div>
+		<div id="spacer" style="height:26px"></div>
+		<button id="retry">Retry</button>
+		<br>
+		<button id="sign-out">Sign out</button>
+		<cite>Made with love by Nicholas Anderson with Mason SRCT</cite>
+	</div>
+</body>
+</html>
