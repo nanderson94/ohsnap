@@ -1,1 +1,1 @@
-start /d "\node-webkit\win32\" nw.exe
+start /d %~dp0"node-webkit\win32\" nw.exe src

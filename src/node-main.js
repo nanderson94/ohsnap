@@ -1,7 +1,8 @@
 var dns 		= require('dns'),
 	fs 			= require('fs'),
 	zombie 		= require('zombie'),
-	requesta 	= require('request');
+	requesta 	= require('request'),
+	cookies 	= "";
 
 // GMU's UAC page uses a self-signed certificate
 
@@ -25,37 +26,57 @@ exports.login = function(username, password, options, callback) {
 		return;
 	}
 	var options = {
-		url: 	options['url'] 		|| "https://uac.gmu.edu/",
-		ua: 	options['ua']  		|| mobileUA,
-		realm: 	options['realm']	|| "students"
+		url: 					options['url'] 					|| "https://uac.gmu.edu/",
+		ua: 					options['ua']  					|| "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D"
+																	+") AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.16"
+																	+"6 Mobile Safari/535.19",
+		realm: 					options['realm']				|| "students",
+		usernameselector: 		options['usernameselector'] 	|| "#username",
+		passwordselector: 		options['passwordselector']		|| "#password",
+		submitselector: 		options['submitselector']		|| ".confirm",
+		checkselector: 			options['checkselector'] 		|| '[name="frmGrab"]'
 	};
-	console.log(options["realm"]);
-	console.log("asdf");
+
+	zombie.loadCSS = false;
 	var browser = new zombie();
-//	browser.userAgent = options['ua'];
+
+	if (options['ua'].length > 0) {
+		browser.userAgent = options['ua'];
+	}
+	console.log(cookies);
+	if (cookies.length>1) {
+		browser.loadCookies(cookies);
+	}
 	browser.on('error',function (err){
 	//    console.log(err.stack)
 	});
 	browser.visit(options['url']+options['realm'], function() {
 		console.log(browser.location.pathname);
 		if (browser.location.pathname == "/dana/home/infranet.cgi") {
-			// Already logged in
 			callback("Logged In");
 		} else {
+			// This turns the "Sign in" link into 
+			browser.document.querySelector(options['submitselector']).parentNode.innerHTML = 
+				browser.document.querySelector(options['submitselector']).parentNode.innerHTML.
+					replace('<a', '<input type="submit"').replace('</a>', '');
 			browser.
-				fill('username', username).
-				fill('password', password).
-				pressButton("btnSubmit", function() {
+				fill(options['usernameselector'], username).
+				fill(options['passwordselector'], password).
+				pressButton(options['submitselector'], function() {
 					if (browser.location.search == "?p=failed") {
 						callback("Invalid Login");
 						return;
+					} else if (browser.location.pathname == "") {
+						callback("Invalid Login");
 					} else {
-						browser.document.querySelector('[name="frmGrab"]').submit();
+						console.log(browser.location.pathname);
+						browser.document.querySelector(options['checkselector']).submit();
 						callback("Success");
+						cookies = browser.saveCookies();
 					}
 				});
 		}
-	})
+	});
 }
 exports.checkNetwork = function(callback) {
 	requesta.get({url:'http://google.com',followRedirect:false}, function(error, res, body) {

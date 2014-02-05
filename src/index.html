@@ -105,7 +105,7 @@
 					}
 				});
 				// Reactive
-				daloop = window.setTimeout(function init() {
+				function fordaloop() {
 					if (appState.status == appState.AUTHFAIL) {
 						return;
 					}
@@ -133,23 +133,11 @@
 						}
 					});
 					if (appState.status == 4 || appState.status == 3) {
-						daloop = setTimeout(init, 15000);
+						daloop = setTimeout(fordaloop, 15000);
 					}
-				}, 15000)
-				// Proactive
-				forceLoop = setInterval(function() {
-					snap.login(username, password, {realm:realm}, function(result) {
-						if (result == "Success") {
-							lastlogin = new Date().getTime();
-							$('#network-status').text('Connected').removeClass().addClass('success');
-							$('#authenticated-user').text(username);
-							appState.change(appState.ONLINE);
-						} else {
-							$('#network-status').text("Authentication Failure").removeClass().addClass('fail');
-							appState.change(appState.AUTHFAIL);
-						}
-					});
-				}, 15 * 60 * 1000);
+				}
+				daloop = window.setTimeout(fordaloop, 15000);
+				// fordaloop();
 			});
 			$('#sign-out').click(function() {
 				clearInterval(lastloginloop);
