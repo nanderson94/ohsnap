@@ -1,8 +1,8 @@
 var dns 		= require('dns'),
 	fs 			= require('fs'),
 	zombie 		= require('zombie'),
-	requesta 	= require('request'),
 	cookies 	= "";
+	zombie.loadCSS = false;
 
 // GMU's UAC page uses a self-signed certificate
 
@@ -37,7 +37,6 @@ exports.login = function(username, password, options, callback) {
 		checkselector: 			options['checkselector'] 		|| '[name="frmGrab"]'
 	};
 
-	zombie.loadCSS = false;
 	var browser = new zombie();
 
 	if (options['ua'].length > 0) {
@@ -69,7 +68,6 @@ exports.login = function(username, password, options, callback) {
 					} else if (browser.location.pathname == "") {
 						callback("Invalid Login");
 					} else {
-						console.log(browser.location.pathname);
 						browser.document.querySelector(options['checkselector']).submit();
 						callback("Success");
 						cookies = browser.saveCookies();
@@ -79,21 +77,19 @@ exports.login = function(username, password, options, callback) {
 	});
 }
 exports.checkNetwork = function(callback) {
-	requesta.get({url:'http://google.com',followRedirect:false}, function(error, res, body) {
-		if (error) {
-			// General Connection Issue
-			callback(0);
-		} else if (body.length < 15) {
-			// UAC Redirect
-
-			// Are we actually connecting to the UAC?
-			// requesta.get({url:'https://uac.gmu.edu'}, function(error) {
-			// 	// Uhh, I don't know how to test this, maybe go to Starbucks?
-			// })
+	// No longer DoSing Google!!
+	var browser = new zombie();
+	browser.loadCookies(cookies);
+	browser.visit("https://uac.gmu.edu/students", function() {
+		if (browser.location.pathname == "/dana/home/infranet.cgi") {
+			// UAC remembers us, all good!
+			callback(2);
+		} else if (browser.location.pathname.indexOf("/dana-na/auth") == 0) {
+			// Unauthorized
 			callback(1);
 		} else {
-			// All Good
-			callback(2);
+			// Don't really know what else could happen
+			callback(0);
 		}
 	});
 }

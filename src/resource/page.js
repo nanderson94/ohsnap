@@ -1,17 +1,4 @@
 var settings = {
-	get: function(name) {
-		var q = localStorage.getItem(name);
-		if (q=="true") {
-			return true;
-		} else if (q=="false") {
-			return false;
-		} else {
-			return q;
-		}
-	},
-	set: function(name, value) {
-		return localStorage.setItem(name, value);
-	},
 	saveAll: function(auth) {
 		localStorage.setItem('check_minimize', ($('#minimize').is(":checked")?"true":"false"));
 		localStorage.setItem('check_remember', ($('#remember').is(":checked")?"true":"false"));
@@ -35,9 +22,9 @@ var appState = {
 	change: function(num) {
 		if (num == 4) {
 			//ahentges
-			tray.icon = !settings.get('q')?"resource/icon.png":"resource/icon-alt.png";
+			tray.icon = localStorage.getItem('q')!="true"?"resource/icon.png":"resource/icon-alt.png";
 		} else {
-			tray.icon = !settings.get('q')?"resource/icon-inactive.png":"resource/icon-alt-inactive.png";
+			tray.icon = localStorage.getItem('q')!="true"?"resource/icon-inactive.png":"resource/icon-alt-inactive.png";
 		}
 		if (num == 4) {
 			tray.tooltip = "Connected";

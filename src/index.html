@@ -8,7 +8,8 @@
 	<script src="resource/page.js"></script>
 	<script src="resource/jquery.js"></script>
 	<script>
-		var snap = process.mainModule.exports,
+		console.log("Starting up using Node-Webkit version " + process['versions']['node-webkit'])
+		var snap = require('./node-main'),
 			gui = require('nw.gui'),
 			tray = new gui.Tray({title:"Oh SNAP!", tooltip:"Inactive", icon:"resource/icon-inactive.png"}),
 			menu = new gui.Menu(),
@@ -105,7 +106,7 @@
 					}
 				});
 				// Reactive
-				function fordaloop() {
+				daloop = window.setTimeout(function init() {
 					if (appState.status == appState.AUTHFAIL) {
 						return;
 					}
@@ -133,11 +134,9 @@
 						}
 					});
 					if (appState.status == 4 || appState.status == 3) {
-						daloop = setTimeout(fordaloop, 15000);
+						daloop = setTimeout(init, 15000);
 					}
-				}
-				daloop = window.setTimeout(fordaloop, 15000);
-				// fordaloop();
+				}, 15000);
 			});
 			$('#sign-out').click(function() {
 				clearInterval(lastloginloop);
