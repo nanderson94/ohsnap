@@ -5,6 +5,10 @@
 
 # This gets tricky because I need to modify the binaries...
 
+# The "magic" command to fix libudev.so.0 > libudev.so.1
+# sed -i 's/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x30/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x31/g' nw
+# Thanks to https://github.com/rogerwang/node-webkit/issues/1703
+
 if [ "x$1" = "x" ]; then
 	echo -e "\e[0;37mWelcome to the \e[1;37mNode-Webkit\e[0;37m download wizard!\e[0m";
 	echo -e "Please run this command with one of the args below\n";
