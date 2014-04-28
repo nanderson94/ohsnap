@@ -22,7 +22,7 @@ else
 	# Let's pull some scripts
 	if [ "$1" = "all" ] || [ "$1" = "linux64" ]; then
 		echo "Fetching files for Linux 64-bit...";
-	  echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/linux-x64";
+		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/linux-x64";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/linux-x64"
 		curl --silent http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-linux-x64.tar.gz | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-x64"
 		mv "${BASH_SOURCE%/*}/node-webkit/linux-x64/node-webkit"*/* "${BASH_SOURCE%/*}/node-webkit/linux-x64" 
@@ -32,7 +32,7 @@ else
 	fi;
 	if [ "$1" = "all" ] || [ "$1" = "linux32" ]; then
 		echo "Fetching files for Linux 32-bit...";
-	  echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/linux-ia32";
+		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/linux-ia32";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
 		curl --silent http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-linux-ia32.tar.gz | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
 		mv "${BASH_SOURCE%/*}/node-webkit/linux-ia32/node-webkit"*/* "${BASH_SOURCE%/*}/node-webkit/linux-ia32" 
@@ -42,7 +42,7 @@ else
 	fi;
 	if [ "$1" = "all" ] || [ "$1" = "mac" ]; then
 		echo "Fetching files for MacOS 32-bit...";
-	  echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/osx-ia32";
+		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/osx-ia32";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/osx-ia32"
 		# Ugh, zip
 		curl --silent "http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-osx-ia32.zip" -o "${BASH_SOURCE%/*}/node-webkit/osx-ia32/archive.zip"
@@ -54,7 +54,7 @@ else
 	fi;
 	if [ "$1" = "all" ] || [ "$1" = "win" ]; then # How do I test for windows from bash? Namely cygwin
 		echo "Fetching files for Windows 32-bit...";
-	  echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/win-ia32";
+		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/win-ia32";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/win-ia32"
 		# Ugh, zip
 		curl --silent "http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-win-ia32.zip" -o "${BASH_SOURCE%/*}/node-webkit/win-ia32/archive.zip"
