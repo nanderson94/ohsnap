@@ -1,6 +1,8 @@
 Oh SNAP!
 ========
 
+![Oh SNAP!](https://i.imgur.com/5A1eXHu.png)
+
 A simple login agent for George Mason University's Student Network Access Protection (SNAP).
 
 Contributing
