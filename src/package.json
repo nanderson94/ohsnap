@@ -1,43 +1,59 @@
 {
-	"name":			"OhSNAP",
-	"main":			"index.html",
-	"node-main":	"node-main.js",
-	"description":	"George Mason University SNAP Agent",
-	"version":		"1.0.0",
-	"keywords":		["GMU", "George Mason University", "UAC", "SNAP"],
-	"bugs":			"mailto:nander13@gmu.edu",
-	"window": {
-		"title":		"Oh SNAP!",
-		"icon":			"icon.png",
-		"toolbar":		false,
-		"frame":		false,
-		"width":		400,
-		"height":		321,
-		"position":		"center",
-		"min_width":	300,
-		"resizable":	false,
-		"always-on-top":false,
-		"fullscreen":	false,
-		"show":			true,
-		"kiosk":		false,
-		"transparent":	true
-	},
-	"maintainers":	[{
-		"name":			"Nicholas Anderson",
-		"email":		"nander13@gmu.edu",
-		"web":			"https://github.com/deadeye536"
-	}],
-	"contributors":	[{
-		"name":			"Nicholas Anderson",
-		"email":		"nander13@gmu.edu",
-		"web":			"https://github.com/deadeye536"
-	}],
-	"licenses":		[{
-		"type":			"BSD",
-		"url":			"TODO"
-	}],
-	"repository":	[{
-		"type":			"git",
-		"url":			"https://github.com/deadeye536/oh-snap.git"
-	}]
+  "name": "OhSNAP",
+  "main": "index.html",
+  "node-main": "node-main.js",
+  "description": "George Mason University SNAP Agent",
+  "version": "1.0.0",
+  "keywords": [
+    "GMU",
+    "George Mason University",
+    "UAC",
+    "SNAP"
+  ],
+  "bugs": "mailto:nander13@gmu.edu",
+  "window": {
+    "title": "Oh SNAP!",
+    "icon": "icon.png",
+    "toolbar": false,
+    "frame": false,
+    "width": 400,
+    "height": 321,
+    "position": "center",
+    "min_width": 300,
+    "resizable": false,
+    "always-on-top": false,
+    "fullscreen": false,
+    "show": true,
+    "kiosk": false,
+    "transparent": true
+  },
+  "maintainers": [
+    {
+      "name": "Nicholas Anderson",
+      "email": "nander13@gmu.edu",
+      "web": "https://github.com/deadeye536"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Nicholas Anderson",
+      "email": "nander13@gmu.edu",
+      "web": "https://github.com/deadeye536"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "TODO"
+    }
+  ],
+  "repository": [
+    {
+      "type": "git",
+      "url": "https://github.com/deadeye536/oh-snap.git"
+    }
+  ],
+  "dependencies": {
+    "request": "^2.45.0"
+  }
 }
