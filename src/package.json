@@ -54,6 +54,7 @@
     }
   ],
   "dependencies": {
-    "request": "^2.45.0"
+    "request": "^2.45.0",
+    "tough-cookie": "^0.12.1"
   }
 }
