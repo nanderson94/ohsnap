@@ -26,7 +26,7 @@ else
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/linux-x64"
 		curl --silent "http://dl.node-webkit.org/v0.10.5/node-webkit-v0.10.5-linux-x64.tar.gz" | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-x64"
 		mv "${BASH_SOURCE%/*}/node-webkit/linux-x64/node-webkit"*/* "${BASH_SOURCE%/*}/node-webkit/linux-x64" 
-		rmdir "${BASH_SOURCE%/*}/node-webkit/linux-x64/node-webkit"*;
+		rm -rf "${BASH_SOURCE%/*}/node-webkit/linux-x64/node-webkit"*;
 		echo "Patching node-webkit...";
 		sed -i 's/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x30/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x31/g' "${BASH_SOURCE%/*}/node-webkit/linux-x64/nw";
 	fi;
@@ -36,7 +36,7 @@ else
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
 		curl --silent "http://dl.node-webkit.org/v0.10.5/node-webkit-v0.10.5-linux-ia32.tar.gz" | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
 		mv "${BASH_SOURCE%/*}/node-webkit/linux-ia32/node-webkit"*/* "${BASH_SOURCE%/*}/node-webkit/linux-ia32" 
-		rmdir "${BASH_SOURCE%/*}/node-webkit/linux-ia32/node-webkit"*;
+		rm -rf "${BASH_SOURCE%/*}/node-webkit/linux-ia32/node-webkit"*;
 		echo "Patching node-webkit...";
 		sed -i 's/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x30/\x75\x64\x65\x76\x2E\x73\x6F\x2E\x31/g' "${BASH_SOURCE%/*}/node-webkit/linux-ia32/nw";
 	fi;
