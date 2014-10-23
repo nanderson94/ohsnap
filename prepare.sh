@@ -24,7 +24,7 @@ else
 		echo "Fetching files for Linux 64-bit...";
 		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/linux-x64";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/linux-x64"
-		curl --silent http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-linux-x64.tar.gz | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-x64"
+		curl --silent "http://dl.node-webkit.org/v0.10.5/node-webkit-v0.10.5-linux-x64.tar.gz" | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-x64"
 		mv "${BASH_SOURCE%/*}/node-webkit/linux-x64/node-webkit"*/* "${BASH_SOURCE%/*}/node-webkit/linux-x64" 
 		rmdir "${BASH_SOURCE%/*}/node-webkit/linux-x64/node-webkit"*;
 		echo "Patching node-webkit...";
@@ -34,7 +34,7 @@ else
 		echo "Fetching files for Linux 32-bit...";
 		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/linux-ia32";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
-		curl --silent http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-linux-ia32.tar.gz | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
+		curl --silent "http://dl.node-webkit.org/v0.10.5/node-webkit-v0.10.5-linux-ia32.tar.gz" | tar -xvzC "${BASH_SOURCE%/*}/node-webkit/linux-ia32"
 		mv "${BASH_SOURCE%/*}/node-webkit/linux-ia32/node-webkit"*/* "${BASH_SOURCE%/*}/node-webkit/linux-ia32" 
 		rmdir "${BASH_SOURCE%/*}/node-webkit/linux-ia32/node-webkit"*;
 		echo "Patching node-webkit...";
@@ -45,7 +45,7 @@ else
 		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/osx-ia32";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/osx-ia32"
 		# Ugh, zip
-		curl --silent "http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-osx-ia32.zip" -o "${BASH_SOURCE%/*}/node-webkit/osx-ia32/archive.zip"
+		curl --silent "http://dl.node-webkit.org/v0.10.5/node-webkit-v0.10.5-osx-ia32.zip" -o "${BASH_SOURCE%/*}/node-webkit/osx-ia32/archive.zip"
 		unzip "${BASH_SOURCE%/*}/node-webkit/osx-ia32/archive.zip" -d "${BASH_SOURCE%/*}/node-webkit/osx-ia32";
 		rm "${BASH_SOURCE%/*}/node-webkit/osx-ia32/archive.zip";
 		echo "Patching node-webkit...";
@@ -57,7 +57,7 @@ else
 		echo "Downloading binaries to: ${BASH_SOURCE%/*}/node-webkit/win-ia32";
 		mkdir -p "${BASH_SOURCE%/*}/node-webkit/win-ia32"
 		# Ugh, zip
-		curl --silent "http://dl.node-webkit.org/v0.9.2/node-webkit-v0.9.2-win-ia32.zip" -o "${BASH_SOURCE%/*}/node-webkit/win-ia32/archive.zip"
+		curl --silent "http://dl.node-webkit.org/v0.10.5/node-webkit-v0.10.5-win-ia32.zip " -o "${BASH_SOURCE%/*}/node-webkit/win-ia32/archive.zip"
 		unzip "${BASH_SOURCE%/*}/node-webkit/win-ia32/archive.zip" -d "${BASH_SOURCE%/*}/node-webkit/win-ia32";
 		rm "${BASH_SOURCE%/*}/node-webkit/win-ia32/archive.zip";
 		echo "Patching node-webkit...";
